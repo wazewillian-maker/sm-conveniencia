@@ -1,4 +1,6 @@
 "use client";
+/* As imagens comerciais são remotas e serão substituídas pelas fotos reais da loja. */
+/* eslint-disable @next/next/no-img-element */
 
 import { useEffect, useMemo, useState } from "react";
 import { AtSign, Beer, BottleWine, Candy, ChevronRight, Clock3, GlassWater, IceCreamBowl, MapPin, Menu, MessageCircle, Package, Search, ShoppingBag, Sparkles, Star, X, Zap } from "lucide-react";
@@ -9,7 +11,7 @@ const categoryIcons = [GlassWater, Beer, BottleWine, Zap, GlassWater, IceCreamBo
 const moments = [
   { title: "Para o churrasco", text: "Bebidas geladas, gelo e acompanhamentos.", image: "https://images.unsplash.com/photo-1529193591184-b1d58069ecdd?auto=format&fit=crop&w=1000&q=85" },
   { title: "Para a resenha", text: "Tudo pronto para reunir a galera.", image: "https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=1000&q=85" },
-  { title: "Para acompanhar o filme", text: "Snacks, doces e bebidas no clima certo.", image: "https://images.unsplash.com/photo-1574267432644-f610f8be8e76?auto=format&fit=crop&w=1000&q=85" },
+  { title: "Para acompanhar o filme", text: "Salgadinhos, doces e bebidas no clima certo.", image: "https://images.pexels.com/photos/8972769/pexels-photo-8972769.jpeg?auto=compress&cs=tinysrgb&w=1000" },
   { title: "Para refrescar a noite", text: "Gelo, energéticos e bebidas bem geladas.", image: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=1000&q=85" },
 ];
 
@@ -69,7 +71,7 @@ export default function Home() {
   return (
     <main>
       <div className={`loader ${loading ? "is-loading" : "is-hidden"}`} aria-hidden={!loading}>
-        <div className="loader-brand"><span>SM</span><b>ConveniÃªncia</b></div>
+        <div className="loader-brand"><span>SM</span><b>Conveniência</b></div>
         <i />
       </div>
       <header className={`header ${headerScrolled ? "scrolled" : ""}`}>
@@ -86,7 +88,7 @@ export default function Home() {
         <div className="hero-copy">
           <p className="eyebrow"><Sparkles size={15}/> Sua noite, mais completa</p>
           <h1>Tudo o que você precisa, <em>quando você precisa.</em></h1>
-          <p className="lead">Bebidas, gelo, snacks, doces e muito mais para deixar qualquer momento completo.</p>
+          <p className="lead">Bebidas geladas, gelo, salgadinhos, doces e muito mais para qualquer momento.</p>
           <div className="hero-actions"><a className="button" href="#promocoes">Ver promoções <ChevronRight /></a><a className="button ghost" href={orderLink()} target="_blank"><MessageCircle /> Pedir pelo WhatsApp</a></div>
           <div className="hero-points"><span><Package/> Variedade de produtos</span><span><Zap/> Atendimento rápido</span><span><MessageCircle/> Pedidos pelo WhatsApp</span></div>
         </div>
@@ -125,16 +127,16 @@ export default function Home() {
 
       <section id="sobre" className="section about">
         <div className="about-visual"><div><span>SM</span><p>Praticidade que acompanha o seu ritmo.</p></div></div>
-        <div><p className="eyebrow">Sobre a SM</p><h2>Seu momento pede praticidade</h2><p className="about-copy">A SM Conveniência nasceu para tornar seus momentos mais práticos. Em um só lugar, você encontra bebidas, snacks, gelo, doces e diversas opções para completar sua noite, encontro ou comemoração.</p><div className="features">{["Variedade", "Facilidade", "Atendimento próximo", "Pedidos rápidos", "Opções para cada ocasião"].map(x => <span key={x}><Star/>{x}</span>)}</div></div>
+        <div><p className="eyebrow">Sobre a SM</p><h2>Seu momento pede praticidade</h2><p className="about-copy">A SM Conveniência nasceu para tornar seus momentos mais práticos. Em um só lugar, você encontra bebidas, salgadinhos, gelo, doces e diversas opções para completar sua noite, encontro ou comemoração.</p><div className="features">{["Variedade", "Facilidade", "Atendimento próximo", "Pedidos rápidos", "Opções para cada ocasião"].map(x => <span key={x}><Star/>{x}</span>)}</div></div>
       </section>
 
       <section id="localizacao" className="section location">
-        <div className="map-placeholder"><MapPin/><strong>Localização em configuração</strong><span>O mapa será exibido assim que o endereço for confirmado.</span></div>
-        <div className="location-info"><p className="eyebrow">Venha até a SM</p><h2>Localização e funcionamento</h2><div className="info-row"><MapPin/><div><small>Endereço</small><strong>{storeConfig.address}</strong></div></div><div className="info-row"><Clock3/><div><small>Funcionamento</small><strong>{storeConfig.hours}</strong></div></div><div className="info-row"><MessageCircle/><div><small>WhatsApp</small><strong>Número a confirmar</strong></div></div><div className="location-actions"><a className={`button ${!storeConfig.mapsUrl ? "disabled" : ""}`} href={storeConfig.mapsUrl || undefined}>Como chegar</a><a className={`button ghost ${!storeConfig.instagram ? "disabled" : ""}`} href={storeConfig.instagram || undefined}><AtSign/> Instagram</a></div></div>
+        {storeConfig.mapsEmbedUrl ? <iframe className="map-frame" src={storeConfig.mapsEmbedUrl} title="Mapa da SM Conveniência" loading="lazy" /> : <div className="map-placeholder"><MapPin/><strong>Localização em atualização</strong><span>Endereço e mapa serão disponibilizados em breve.</span><small>Informação temporária</small></div>}
+        <div className="location-info"><p className="eyebrow">Venha até a SM</p><h2>Localização e funcionamento</h2><div className="info-row"><MapPin/><div><small>Endereço</small><strong>{storeConfig.address}</strong></div></div><div className="info-row"><Clock3/><div><small>Funcionamento</small><strong>{storeConfig.hours}</strong></div></div><div className="info-row"><MessageCircle/><div><small>WhatsApp</small><strong>{storeConfig.whatsappDisplay}</strong></div></div><div className="info-row"><AtSign/><div><small>Instagram</small><strong>{storeConfig.instagramDisplay}</strong></div></div><div className="location-actions"><a className={`button ${!storeConfig.mapsUrl ? "disabled" : ""}`} href={storeConfig.mapsUrl || undefined}>Como chegar</a><a className={`button ghost ${!storeConfig.instagram ? "disabled" : ""}`} href={storeConfig.instagram || undefined}><AtSign/> Instagram</a></div></div>
       </section>
 
       <section className="final-cta"><p className="eyebrow">Seu pedido começa aqui</p><h2>Bateu a vontade? <em>A SM resolve.</em></h2><p>Escolha seus favoritos e fale com a gente pelo WhatsApp.</p><a className="button" href={orderLink()} target="_blank"><MessageCircle/> Iniciar meu pedido</a></section>
-      <footer><a href="#inicio" className="brand"><span>SM</span><b>Conveniência</b></a><div className="footer-links"><a href="#promocoes">Promoções</a><a href="#catalogo">Catálogo</a><a href="#sobre">Sobre</a><a href="#localizacao">Localização</a></div><div className="footer-meta"><span>WhatsApp a confirmar</span><span>Instagram a confirmar</span><span>{storeConfig.address}</span></div><div className="footer-bottom"><span>© {new Date().getFullYear()} SM Conveniência. Todos os direitos reservados.</span><span>Desenvolvido por Next Dev</span></div></footer>
+      <footer><a href="#inicio" className="brand"><span>SM</span><b>Conveniência</b></a><div className="footer-links"><a href="#promocoes">Promoções</a><a href="#catalogo">Catálogo</a><a href="#sobre">Sobre</a><a href="#localizacao">Localização</a></div><div className="footer-meta"><span>{storeConfig.whatsappDisplay}</span><span>{storeConfig.instagramDisplay}</span><span>{storeConfig.address}</span></div><div className="footer-bottom"><span>© {new Date().getFullYear()} SM Conveniência. Todos os direitos reservados.</span><a className="next-dev-credit" href={storeConfig.nextDevUrl} target="_blank" rel="noreferrer">Desenvolvido por Next Dev</a></div></footer>
       <a className="float-whatsapp" href={orderLink()} target="_blank" aria-label="Pedir pelo WhatsApp"><MessageCircle/></a>
     </main>
   );

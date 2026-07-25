@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://sm-conveniencia.wazewillian.chatgpt.site"),
   title: "SM Conveniência | Tudo para o seu momento",
-  description: "Bebidas, gelo, snacks, doces e muito mais para deixar qualquer momento completo.",
+  description: "Bebidas geladas, gelo, salgadinhos, doces e muito mais para qualquer momento.",
   icons: { icon: "/favicon.svg" },
   openGraph: {
     title: "SM Conveniência",
