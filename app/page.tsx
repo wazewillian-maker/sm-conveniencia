@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { AtSign, Beer, BottleWine, Candy, ChevronRight, Clock3, GlassWater, IceCreamBowl, MapPin, Menu, MessageCircle, Package, Search, ShoppingBag, Sparkles, Star, X, Zap } from "lucide-react";
 import { categories, combos, products, promotions, type Category } from "../src/data/catalog";
 import { storeConfig, whatsappLink } from "../src/data/storeConfig";
@@ -18,14 +18,61 @@ const orderLink = (name?: string) => whatsappLink(name ? `Olá, vim pelo site da
 
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [headerScrolled, setHeaderScrolled] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [active, setActive] = useState<"Todos" | Category>("Todos");
   const [query, setQuery] = useState("");
   const filtered = useMemo(() => products.filter(p => (active === "Todos" || p.category === active) && p.name.toLowerCase().includes(query.toLowerCase())), [active, query]);
   const jumpToCatalog = (category: Category) => { setActive(category); document.querySelector("#catalogo")?.scrollIntoView({ behavior: "smooth" }); };
 
+  useEffect(() => {
+    const seenLoader = sessionStorage.getItem("sm-loader-seen");
+    if (!seenLoader) {
+      sessionStorage.setItem("sm-loader-seen", "true");
+    }
+    const timer = window.setTimeout(() => setLoading(false), seenLoader ? 0 : 950);
+    return () => window.clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    const onScroll = () => setHeaderScrolled(window.scrollY > 24);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
+    const targets = document.querySelectorAll(
+      ".section-head, .category-grid > *, .promo-grid > *, .moments > *, .catalog-tools, .product-grid > *, .combo-grid > *, .about > *, .location > *, .final-cta > *, footer > *",
+    );
+    targets.forEach((element, index) => {
+      element.classList.add("reveal");
+      (element as HTMLElement).style.setProperty("--reveal-delay", `${Math.min(index % 5, 4) * 55}ms`);
+    });
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      targets.forEach(element => element.classList.add("is-visible"));
+      return;
+    }
+    const observer = new IntersectionObserver(
+      entries => entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        }
+      }),
+      { rootMargin: "0px 0px -8% 0px", threshold: 0.08 },
+    );
+    targets.forEach(element => observer.observe(element));
+    return () => observer.disconnect();
+  }, [filtered]);
+
   return (
     <main>
-      <header className="header">
+      <div className={`loader ${loading ? "is-loading" : "is-hidden"}`} aria-hidden={!loading}>
+        <div className="loader-brand"><span>SM</span><b>ConveniÃªncia</b></div>
+        <i />
+      </div>
+      <header className={`header ${headerScrolled ? "scrolled" : ""}`}>
         <a href="#inicio" className="brand"><span>SM</span><b>Conveniência</b></a>
         <nav className={menuOpen ? "nav open" : "nav"}>
           {["Início", "Promoções", "Catálogo", "Sobre", "Localização"].map(item => <a key={item} href={`#${item.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase()}`} onClick={() => setMenuOpen(false)}>{item}</a>)}
