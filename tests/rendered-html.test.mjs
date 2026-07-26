@@ -23,6 +23,12 @@ test("server-renderiza o site da SM Conveniência", async () => {
   assert.match(html, /Tudo o que voc/);
   assert.match(html, /id="catalogo"/);
   assert.match(html, /id="promocoes"/);
-  assert.match(html, /Pedir agora/);
+  assert.match(html, /Entre em contato/);
+  assert.match(html, /Consultar pelo WhatsApp/);
+  assert.match(html, /554792930951/);
+  assert.match(html, /Ol%C3%A1!%20Encontrei%20a%20SM%20Conveni%C3%AAncia%20pelo%20site/);
+  assert.match(html, /Av\. Falcão, nº 170, Sala 03/);
+  assert.match(html, /google\.com\/maps\/search\/\?api=1/);
+  assert.doesNotMatch(html, /Pedir agora|Peça agora|Fazer pedido|Comprar|Número a confirmar|Endereço a confirmar/);
   assert.doesNotMatch(html, /codex-preview/);
 });

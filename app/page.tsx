@@ -3,7 +3,7 @@
 /* eslint-disable @next/next/no-img-element */
 
 import { useEffect, useMemo, useState } from "react";
-import { AtSign, Beer, BottleWine, Candy, ChevronRight, Clock3, GlassWater, IceCreamBowl, MapPin, Menu, MessageCircle, Package, Search, ShoppingBag, Sparkles, Star, X, Zap } from "lucide-react";
+import { Beer, BottleWine, Candy, ChevronRight, GlassWater, IceCreamBowl, MapPin, Menu, MessageCircle, Package, Search, ShoppingBag, Sparkles, Star, X, Zap } from "lucide-react";
 import { categories, combos, products, promotions, type Category } from "../src/data/catalog";
 import { storeConfig, whatsappLink } from "../src/data/storeConfig";
 
@@ -16,7 +16,7 @@ const moments = [
 ];
 
 const money = (value: number) => value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
-const orderLink = (name?: string) => whatsappLink(name ? `Olá, vim pelo site da SM Conveniência e gostaria de pedir: ${name}.` : undefined);
+const contactLink = (name?: string) => whatsappLink(name ? `Olá! Encontrei a SM Conveniência pelo site e gostaria de mais informações sobre: ${name}.` : undefined);
 
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -78,7 +78,7 @@ export default function Home() {
         <a href="#inicio" className="brand"><span>SM</span><b>Conveniência</b></a>
         <nav className={menuOpen ? "nav open" : "nav"}>
           {["Início", "Promoções", "Catálogo", "Sobre", "Localização"].map(item => <a key={item} href={`#${item.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase()}`} onClick={() => setMenuOpen(false)}>{item}</a>)}
-          <a className="button button-sm" href={orderLink()} target="_blank">Pedir agora</a>
+          <a className="button button-sm" href={contactLink()} target="_blank" rel="noopener noreferrer">Entre em contato</a>
         </nav>
         <button className="menu" aria-label="Abrir menu" onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? <X /> : <Menu />}</button>
       </header>
@@ -89,10 +89,10 @@ export default function Home() {
           <p className="eyebrow"><Sparkles size={15}/> Sua noite, mais completa</p>
           <h1>Tudo o que você precisa, <em>quando você precisa.</em></h1>
           <p className="lead">Bebidas geladas, gelo, salgadinhos, doces e muito mais para qualquer momento.</p>
-          <div className="hero-actions"><a className="button" href="#promocoes">Ver promoções <ChevronRight /></a><a className="button ghost" href={orderLink()} target="_blank"><MessageCircle /> Pedir pelo WhatsApp</a></div>
-          <div className="hero-points"><span><Package/> Variedade de produtos</span><span><Zap/> Atendimento rápido</span><span><MessageCircle/> Pedidos pelo WhatsApp</span></div>
+          <div className="hero-actions"><a className="button" href="#promocoes">Ver promoções <ChevronRight /></a><a className="button ghost" href={contactLink()} target="_blank" rel="noopener noreferrer"><MessageCircle /> Entre em contato</a></div>
+          <div className="hero-points"><span><Package/> Variedade de produtos</span><span><Zap/> Atendimento rápido</span><span><MessageCircle/> Atendimento pelo WhatsApp</span></div>
         </div>
-        <div className="hero-card"><span>SM seleciona</span><strong>O essencial da sua noite, em um só lugar.</strong><small>Escolha. Peça. Aproveite.</small></div>
+        <div className="hero-card"><span>SM seleciona</span><strong>O essencial da sua noite, em um só lugar.</strong><small>Escolha. Consulte. Aproveite.</small></div>
       </section>
 
       <section className="section category-section">
@@ -101,9 +101,9 @@ export default function Home() {
       </section>
 
       <section id="promocoes" className="section dark-band">
-        <div className="section-head"><div><p className="eyebrow">Oportunidades da vez</p><h2>Promoções da SM</h2></div><p>Seleções provisórias para você visualizar como as ofertas vão aparecer.</p></div>
-        <div className="promo-grid">{promotions.map(item => <article className="promo-card" key={item.id}><div className="product-image"><img src={item.image} alt={item.name}/><span className="badge">{item.badge}</span></div><div className="card-body"><small>{item.category}</small><h3>{item.name}</h3><p>{item.description}</p><div className="price"><s>{money(item.oldPrice)}</s><strong>{money(item.price)}</strong></div><a className="button full" href={orderLink(item.name)} target="_blank">Pedir agora <MessageCircle/></a></div></article>)}</div>
-        <p className="demo-note">Produtos e valores demonstrativos — consulte disponibilidade e valor atual no atendimento.</p>
+        <div className="section-head"><div><p className="eyebrow">Oportunidades da vez</p><h2>Promoções da SM</h2></div><p>Confira as opções em destaque e fale com a gente para saber mais.</p></div>
+        <div className="promo-grid">{promotions.map(item => <article className="promo-card" key={item.id}><div className="product-image"><img src={item.image} alt={item.name}/><span className="badge">{item.badge}</span></div><div className="card-body"><small>{item.category}</small><h3>{item.name}</h3><p>{item.description}</p><div className="price"><s>{money(item.oldPrice)}</s><strong>{money(item.price)}</strong></div><a className="button full" href={contactLink(item.name)} target="_blank" rel="noopener noreferrer">Consultar pelo WhatsApp <MessageCircle/></a></div></article>)}</div>
+        <p className="demo-note">Consulte disponibilidade e valor atual pelo WhatsApp.</p>
       </section>
 
       <section className="section">
@@ -112,32 +112,32 @@ export default function Home() {
       </section>
 
       <section id="catalogo" className="section catalog">
-        <div className="section-head"><div><p className="eyebrow">Escolha sem pressa</p><h2>Catálogo SM</h2></div><p>Busque, filtre e mande seu pedido direto para o atendimento.</p></div>
+        <div className="section-head"><div><p className="eyebrow">Escolha sem pressa</p><h2>Catálogo SM</h2></div><p>Busque, filtre e consulte os produtos diretamente com a equipe.</p></div>
         <div className="catalog-tools"><label><Search/><input value={query} onChange={e => setQuery(e.target.value)} placeholder="Buscar no catálogo..." /></label><div className="filters">{(["Todos", ...categories] as const).map(cat => <button className={active === cat ? "active" : ""} onClick={() => setActive(cat)} key={cat}>{cat}</button>)}</div></div>
-        <div className="product-grid">{filtered.map(item => <article className="product-card" key={item.id}><img src={item.image} alt={item.name}/><div className="card-body"><small>{item.category}</small><h3>{item.name}</h3><p>{item.description}</p><div className="product-bottom"><strong>{money(item.price)}</strong><a href={orderLink(item.name)} target="_blank" aria-label={`Pedir ${item.name}`}><MessageCircle/></a></div></div></article>)}</div>
+        <div className="product-grid">{filtered.map(item => <article className="product-card" key={item.id}><img src={item.image} alt={item.name}/><div className="card-body"><small>{item.category}</small><h3>{item.name}</h3><p>{item.description}</p><div className="product-bottom"><strong>{money(item.price)}</strong><a href={contactLink(item.name)} target="_blank" rel="noopener noreferrer" aria-label={`Consultar ${item.name} pelo WhatsApp`}><MessageCircle/></a></div></div></article>)}</div>
         {!filtered.length && <div className="empty">Nenhum produto encontrado nesta busca.</div>}
-        <p className="demo-note">Catálogo demonstrativo. Produtos, disponibilidade e preços serão confirmados no atendimento.</p>
+        <p className="demo-note">Produtos, disponibilidade e preços devem ser confirmados no atendimento.</p>
       </section>
 
       <section id="combos" className="section dark-band">
         <div className="section-head"><div><p className="eyebrow">Tudo combinado</p><h2>Combos para facilitar</h2></div><p>Seleções prontas para você resolver o momento em poucos toques.</p></div>
-        <div className="combo-grid">{combos.map(combo => <article className="combo-card" key={combo.name}><img src={combo.image} alt={combo.name}/><div className="card-body"><h3>{combo.name}</h3><ul>{combo.items.map(i => <li key={i}><Star/> {i}</li>)}</ul><div className="combo-price"><span>A partir de</span><strong>{money(combo.price)}</strong></div><a className="button full" href={orderLink(combo.name)} target="_blank">Quero este combo</a></div></article>)}</div>
-        <p className="demo-note">Combos e preços provisórios, sujeitos à confirmação.</p>
+        <div className="combo-grid">{combos.map(combo => <article className="combo-card" key={combo.name}><img src={combo.image} alt={combo.name}/><div className="card-body"><h3>{combo.name}</h3><ul>{combo.items.map(i => <li key={i}><Star/> {i}</li>)}</ul><div className="combo-price"><span>A partir de</span><strong>{money(combo.price)}</strong></div><a className="button full" href={contactLink(combo.name)} target="_blank" rel="noopener noreferrer">Consultar pelo WhatsApp</a></div></article>)}</div>
+        <p className="demo-note">Consulte a disponibilidade e os preços atuais pelo WhatsApp.</p>
       </section>
 
       <section id="sobre" className="section about">
         <div className="about-visual"><div><span>SM</span><p>Praticidade que acompanha o seu ritmo.</p></div></div>
-        <div><p className="eyebrow">Sobre a SM</p><h2>Seu momento pede praticidade</h2><p className="about-copy">A SM Conveniência nasceu para tornar seus momentos mais práticos. Em um só lugar, você encontra bebidas, salgadinhos, gelo, doces e diversas opções para completar sua noite, encontro ou comemoração.</p><div className="features">{["Variedade", "Facilidade", "Atendimento próximo", "Pedidos rápidos", "Opções para cada ocasião"].map(x => <span key={x}><Star/>{x}</span>)}</div></div>
+        <div><p className="eyebrow">Sobre a SM</p><h2>Seu momento pede praticidade</h2><p className="about-copy">A SM Conveniência nasceu para tornar seus momentos mais práticos. Em um só lugar, você encontra bebidas, salgadinhos, gelo, doces e diversas opções para completar sua noite, encontro ou comemoração.</p><div className="features">{["Variedade", "Facilidade", "Atendimento próximo", "Consultas rápidas", "Opções para cada ocasião"].map(x => <span key={x}><Star/>{x}</span>)}</div></div>
       </section>
 
       <section id="localizacao" className="section location">
-        {storeConfig.mapsEmbedUrl ? <iframe className="map-frame" src={storeConfig.mapsEmbedUrl} title="Mapa da SM Conveniência" loading="lazy" /> : <div className="map-placeholder"><MapPin/><strong>Localização em atualização</strong><span>Endereço e mapa serão disponibilizados em breve.</span><small>Informação temporária</small></div>}
-        <div className="location-info"><p className="eyebrow">Venha até a SM</p><h2>Localização e funcionamento</h2><div className="info-row"><MapPin/><div><small>Endereço</small><strong>{storeConfig.address}</strong></div></div><div className="info-row"><Clock3/><div><small>Funcionamento</small><strong>{storeConfig.hours}</strong></div></div><div className="info-row"><MessageCircle/><div><small>WhatsApp</small><strong>{storeConfig.whatsappDisplay}</strong></div></div><div className="info-row"><AtSign/><div><small>Instagram</small><strong>{storeConfig.instagramDisplay}</strong></div></div><div className="location-actions"><a className={`button ${!storeConfig.mapsUrl ? "disabled" : ""}`} href={storeConfig.mapsUrl || undefined}>Como chegar</a><a className={`button ghost ${!storeConfig.instagram ? "disabled" : ""}`} href={storeConfig.instagram || undefined}><AtSign/> Instagram</a></div></div>
+        <a className="map-link" href={storeConfig.mapsUrl} target="_blank" rel="noopener noreferrer" aria-label="Abrir a localização da SM Conveniência no Google Maps"><iframe className="map-frame" src={storeConfig.mapsEmbedUrl} title="Mapa da SM Conveniência" loading="lazy" tabIndex={-1} /></a>
+        <div className="location-info"><p className="eyebrow">Venha até a SM</p><h2>Localização e contato</h2><a className="info-row" href={storeConfig.mapsUrl} target="_blank" rel="noopener noreferrer"><MapPin/><div><small>Endereço</small><strong>{storeConfig.address}</strong></div></a><a className="info-row" href={contactLink()} target="_blank" rel="noopener noreferrer"><MessageCircle/><div><small>WhatsApp</small><strong>{storeConfig.whatsappDisplay}</strong></div></a><div className="location-actions"><a className="button" href={storeConfig.mapsUrl} target="_blank" rel="noopener noreferrer">Como chegar</a></div></div>
       </section>
 
-      <section className="final-cta"><p className="eyebrow">Seu pedido começa aqui</p><h2>Bateu a vontade? <em>A SM resolve.</em></h2><p>Escolha seus favoritos e fale com a gente pelo WhatsApp.</p><a className="button" href={orderLink()} target="_blank"><MessageCircle/> Iniciar meu pedido</a></section>
-      <footer><a href="#inicio" className="brand"><span>SM</span><b>Conveniência</b></a><div className="footer-links"><a href="#promocoes">Promoções</a><a href="#catalogo">Catálogo</a><a href="#sobre">Sobre</a><a href="#localizacao">Localização</a></div><div className="footer-meta"><span>{storeConfig.whatsappDisplay}</span><span>{storeConfig.instagramDisplay}</span><span>{storeConfig.address}</span></div><div className="footer-bottom"><span>© {new Date().getFullYear()} SM Conveniência. Todos os direitos reservados.</span><a className="next-dev-credit" href={storeConfig.nextDevUrl} target="_blank" rel="noreferrer">Desenvolvido por Next Dev</a></div></footer>
-      <a className="float-whatsapp" href={orderLink()} target="_blank" aria-label="Pedir pelo WhatsApp"><MessageCircle/></a>
+      <section className="final-cta"><p className="eyebrow">Fale com a SM</p><h2>Bateu a vontade? <em>A SM resolve.</em></h2><p>Consulte seus produtos favoritos com a gente pelo WhatsApp.</p><a className="button" href={contactLink()} target="_blank" rel="noopener noreferrer"><MessageCircle/> Entre em contato</a></section>
+      <footer><a href="#inicio" className="brand"><span>SM</span><b>Conveniência</b></a><div className="footer-links"><a href="#promocoes">Promoções</a><a href="#catalogo">Catálogo</a><a href="#sobre">Sobre</a><a href="#localizacao">Localização</a></div><div className="footer-meta"><a href={contactLink()} target="_blank" rel="noopener noreferrer">{storeConfig.whatsappDisplay}</a><a href={storeConfig.mapsUrl} target="_blank" rel="noopener noreferrer">{storeConfig.address}</a></div><div className="footer-bottom"><span>© {new Date().getFullYear()} SM Conveniência. Todos os direitos reservados.</span><a className="next-dev-credit" href={storeConfig.nextDevUrl} target="_blank" rel="noreferrer">Desenvolvido por Next Dev</a></div></footer>
+      <a className="float-whatsapp" href={contactLink()} target="_blank" rel="noopener noreferrer" aria-label="Entrar em contato pelo WhatsApp"><MessageCircle/></a>
     </main>
   );
 }

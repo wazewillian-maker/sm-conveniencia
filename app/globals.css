@@ -87,6 +87,7 @@ h1 em { background:linear-gradient(105deg,#c99638 0%,#f6dc96 47%,#d2a147 100%); 
 .promo-card .card-body>p,.product-card .card-body>p { min-height:42px; }
 .product-image img,.promo-card img,.product-card>img,.combo-card>img { object-position:center; }
 .map-frame { width:100%; min-height:480px; border:1px solid #2c2e27; border-radius:24px; filter:saturate(.8) contrast(1.02); }
+.map-link { display:block; border-radius:24px; cursor:pointer; }.map-link .map-frame { display:block; pointer-events:none; }
 .map-placeholder small { color:rgba(240,207,131,.62); font-size:9px; letter-spacing:.14em; text-transform:uppercase; }
 .next-dev-credit { color:#7c7e78; transition:color .25s ease; }
 .next-dev-credit:hover { color:var(--gold2); }

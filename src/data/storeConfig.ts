@@ -1,19 +1,14 @@
 export const storeConfig = {
   name: "SM Conveniência",
-  whatsapp: "",
-  instagram: "",
-  address: "Endereço a confirmar",
-  hours: "Horários a confirmar",
-  mapsUrl: "",
-  mapsEmbedUrl: "",
-  whatsappDisplay: "Número a confirmar",
-  instagramDisplay: "Perfil a confirmar",
+  whatsapp: "554792930951",
+  address: "Av. Falcão, nº 170, Sala 03 — Bombas, Bombinhas – SC",
+  mapsUrl: "https://www.google.com/maps/search/?api=1&query=Av.+Falcão,+170,+Sala+03,+Bombas,+Bombinhas,+SC",
+  mapsEmbedUrl: "https://www.google.com/maps?q=Av.%20Falc%C3%A3o%2C%20170%2C%20Sala%2003%2C%20Bombas%2C%20Bombinhas%2C%20SC&output=embed",
+  whatsappDisplay: "(47) 9293-0951",
   nextDevUrl: "https://nextdev.com.br",
 };
 
-export function whatsappLink(message = "Olá, vim pelo site da SM Conveniência e gostaria de fazer um pedido.") {
+export function whatsappLink(message = "Olá! Encontrei a SM Conveniência pelo site e gostaria de mais informações.") {
   const text = encodeURIComponent(message);
-  return storeConfig.whatsapp
-    ? `https://wa.me/${storeConfig.whatsapp.replace(/\D/g, "")}?text=${text}`
-    : `https://wa.me/?text=${text}`;
+  return `https://wa.me/${storeConfig.whatsapp}?text=${text}`;
 }
