@@ -4,8 +4,10 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { Beer, BottleWine, Candy, ChevronRight, Cigarette, Clock3, GlassWater, IceCreamBowl, MapPin, Menu, MessageCircle, Package, Search, ShieldAlert, ShoppingBag, Sparkles, Star, X, Zap } from "lucide-react";
-import { categories, combos, products, promotions, type Category } from "../src/data/catalog";
+import { categories, products, promotions, type Category } from "../src/data/catalog";
+import { comboDetails, tobaccoDetails, type DetailGroup } from "../src/data/details";
 import { storeConfig, whatsappLink } from "../src/data/storeConfig";
+import { DetailModal } from "./components/DetailModal";
 
 const categoryIcons = [GlassWater, Beer, BottleWine, Zap, GlassWater, IceCreamBowl, Package, Candy, ShoppingBag];
 const moments = [
@@ -15,26 +17,8 @@ const moments = [
   { title: "Para refrescar a noite", text: "Gelo, energéticos e bebidas bem geladas.", image: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=1000&q=85" },
 ];
 
-const money = (value: number) => value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 const contactLink = (name?: string) => whatsappLink(name ? `Olá! Encontrei a SM Conveniência pelo site e gostaria de mais informações sobre: ${name}.` : undefined);
 const tobaccoLink = whatsappLink("Olá! Encontrei a SM Conveniência pelo site e gostaria de consultar os produtos disponíveis na tabacaria.");
-const tobaccoCategories = [
-  "Cigarros",
-  "Narguilés",
-  "Essências para narguilé",
-  "Carvão para narguilé",
-  "Acessórios para narguilé",
-  "Piteiras",
-  "Papel alumínio",
-  "Pegadores",
-  "Rosh",
-  "Mangueiras",
-  "Outros acessórios disponíveis",
-];
-const tobaccoImages = [
-  "https://images.pexels.com/photos/14443340/pexels-photo-14443340.jpeg?auto=compress&cs=tinysrgb&w=900",
-  "https://images.pexels.com/photos/14443346/pexels-photo-14443346.jpeg?auto=compress&cs=tinysrgb&w=900",
-];
 
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -42,6 +26,7 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const [active, setActive] = useState<"Todos" | Category>("Todos");
   const [query, setQuery] = useState("");
+  const [selectedDetail, setSelectedDetail] = useState<DetailGroup | null>(null);
   const filtered = useMemo(() => products.filter(p => (active === "Todos" || p.category === active) && p.name.toLowerCase().includes(query.toLowerCase())), [active, query]);
   const jumpToCatalog = (category: Category) => { setActive(category); document.querySelector("#catalogo")?.scrollIntoView({ behavior: "smooth" }); };
 
@@ -120,8 +105,8 @@ export default function Home() {
 
       <section id="promocoes" className="section dark-band">
         <div className="section-head"><div><p className="eyebrow">Oportunidades da vez</p><h2>Promoções da SM</h2></div><p>Confira as opções em destaque e fale com a gente para saber mais.</p></div>
-        <div className="promo-grid">{promotions.map(item => <article className="promo-card" key={item.id}><div className="product-image"><img src={item.image} alt={item.name}/><span className="badge">{item.badge}</span></div><div className="card-body"><small>{item.category}</small><h3>{item.name}</h3><p>{item.description}</p><div className="price"><s>{money(item.oldPrice)}</s><strong>{money(item.price)}</strong></div><a className="button full" href={contactLink(item.name)} target="_blank" rel="noopener noreferrer">Consultar pelo WhatsApp <MessageCircle/></a></div></article>)}</div>
-        <p className="demo-note">Consulte disponibilidade e valor atual pelo WhatsApp.</p>
+        <div className="promo-grid">{promotions.map(item => <article className="promo-card" key={item.id}><div className="product-image"><img src={item.image} alt={item.name}/><span className="badge">{item.badge}</span></div><div className="card-body"><small>{item.category}</small><h3>{item.name}</h3><p>{item.description}</p><a className="button full" href={contactLink(item.name)} target="_blank" rel="noopener noreferrer">Consultar pelo WhatsApp <MessageCircle/></a></div></article>)}</div>
+        <p className="demo-note">Consulte a disponibilidade atual pelo WhatsApp.</p>
       </section>
 
       <section className="section">
@@ -132,21 +117,21 @@ export default function Home() {
       <section id="catalogo" className="section catalog">
         <div className="section-head"><div><p className="eyebrow">Escolha sem pressa</p><h2>Catálogo SM</h2></div><p>Busque, filtre e consulte os produtos diretamente com a equipe.</p></div>
         <div className="catalog-tools"><label><Search/><input value={query} onChange={e => setQuery(e.target.value)} placeholder="Buscar no catálogo..." /></label><div className="filters">{(["Todos", ...categories] as const).map(cat => <button className={active === cat ? "active" : ""} onClick={() => setActive(cat)} key={cat}>{cat}</button>)}</div></div>
-        <div className="product-grid">{filtered.map(item => <article className="product-card" key={item.id}><img src={item.image} alt={item.name}/><div className="card-body"><small>{item.category}</small><h3>{item.name}</h3><p>{item.description}</p><div className="product-bottom"><strong>{money(item.price)}</strong><a href={contactLink(item.name)} target="_blank" rel="noopener noreferrer" aria-label={`Consultar ${item.name} pelo WhatsApp`}><MessageCircle/></a></div></div></article>)}</div>
+        <div className="product-grid">{filtered.map(item => <article className="product-card" key={item.id}><img src={item.image} alt={item.name}/><div className="card-body"><small>{item.category}</small><h3>{item.name}</h3><p>{item.description}</p><div className="product-bottom"><span>Consulte disponibilidade</span><a href={contactLink(item.name)} target="_blank" rel="noopener noreferrer" aria-label={`Consultar ${item.name} pelo WhatsApp`}><MessageCircle/></a></div></div></article>)}</div>
         {!filtered.length && <div className="empty">Nenhum produto encontrado nesta busca.</div>}
-        <p className="demo-note">Produtos, disponibilidade e preços devem ser confirmados no atendimento.</p>
+        <p className="demo-note">Produtos e disponibilidade devem ser confirmados no atendimento.</p>
       </section>
 
       <section id="tabacaria" className="section tobacco-section">
         <div className="section-head"><div><p className="eyebrow"><Cigarette size={15}/> Espaço Tabacaria</p><h2>Tudo para o seu momento, em um só lugar.</h2></div><p>Consulte nossa equipe para conhecer as opções disponíveis em cada categoria.</p></div>
-        <div className="tobacco-grid">{tobaccoCategories.map((category, index) => <article className="tobacco-card" key={category}><img src={tobaccoImages[index % tobaccoImages.length]} alt="" loading="lazy"/><div><small>Tabacaria</small><h3>{category}</h3><p>Consulte a disponibilidade atual pelo WhatsApp.</p></div></article>)}</div>
+        <div className="tobacco-grid">{tobaccoDetails.map(category => <button className="tobacco-card" key={category.id} onClick={() => setSelectedDetail(category)} aria-label={`Ver detalhes de ${category.cardTitle}`}><img src={category.image} alt={`Imagem representativa de ${category.cardTitle}`} loading="lazy"/><div><small>Tabacaria</small><h3>{category.cardTitle}</h3><p>{category.description}</p><span>Conhecer a categoria <ChevronRight/></span></div></button>)}</div>
         <div className="tobacco-actions"><a className="button" href={tobaccoLink} target="_blank" rel="noopener noreferrer"><MessageCircle/> Consultar disponibilidade</a><p className="age-warning"><ShieldAlert/> Venda proibida para menores de 18 anos.</p></div>
       </section>
 
       <section id="combos" className="section dark-band">
         <div className="section-head"><div><p className="eyebrow">Tudo combinado</p><h2>Combos para facilitar</h2></div><p>Seleções prontas para você resolver o momento em poucos toques.</p></div>
-        <div className="combo-grid">{combos.map(combo => <article className="combo-card" key={combo.name}><img src={combo.image} alt={combo.name}/><div className="card-body">{"eyebrow" in combo && <small>{combo.eyebrow}</small>}<h3>{combo.name}</h3>{"description" in combo && <p>{combo.description}</p>}<ul>{combo.items.map(i => <li key={i}><Star/> {i}</li>)}</ul>{"price" in combo && <div className="combo-price"><span>A partir de</span><strong>{money(combo.price)}</strong></div>}<a className="button full" href={whatsappLink("message" in combo ? combo.message : `Olá! Encontrei a SM Conveniência pelo site e gostaria de mais informações sobre: ${combo.name}.`)} target="_blank" rel="noopener noreferrer">{"buttonLabel" in combo ? combo.buttonLabel : "Consultar pelo WhatsApp"}</a></div></article>)}</div>
-        <p className="demo-note">Consulte a disponibilidade e os preços atuais pelo WhatsApp.</p>
+        <div className="combo-grid">{comboDetails.map(combo => <button className="combo-card" key={combo.id} onClick={() => setSelectedDetail(combo)} aria-label={`Ver itens de ${combo.cardTitle}`}><img src={combo.image} alt={`Imagem representativa de ${combo.cardTitle}`}/><div className="card-body"><small>Combo</small><h3>{combo.cardTitle}</h3><p>{combo.description}</p><ul>{combo.items.map(item => <li key={item.name}><Star/> {item.name}</li>)}</ul><span className="card-detail-link">Ver itens do combo <ChevronRight/></span></div></button>)}</div>
+        <p className="demo-note">Consulte a disponibilidade atual dos itens pelo WhatsApp.</p>
       </section>
 
       <section id="sobre" className="section about">
@@ -162,6 +147,7 @@ export default function Home() {
       <section className="final-cta"><p className="eyebrow">Fale com a SM</p><h2>Bateu a vontade? <em>A SM resolve.</em></h2><p>Consulte seus produtos favoritos com a gente pelo WhatsApp.</p><a className="button" href={contactLink()} target="_blank" rel="noopener noreferrer"><MessageCircle/> Entre em contato</a></section>
       <footer><a href="#inicio" className="brand"><span>SM</span><b>Conveniência</b></a><div className="footer-links"><a href="#promocoes">Promoções</a><a href="#catalogo">Catálogo</a><a href="#tabacaria">Tabacaria</a><a href="#sobre">Sobre</a><a href="#localizacao">Localização</a></div><div className="footer-meta"><a href={contactLink()} target="_blank" rel="noopener noreferrer">{storeConfig.whatsappDisplay}</a><a href={storeConfig.mapsUrl} target="_blank" rel="noopener noreferrer">{storeConfig.address}</a><span className="footer-hours"><Clock3/><span><b>Horário de atendimento</b>{storeConfig.weekdayHours}<br/>{storeConfig.weekendHours}</span></span></div><div className="footer-bottom"><span>© {new Date().getFullYear()} SM Conveniência. Todos os direitos reservados.</span><a className="next-dev-credit" href={storeConfig.nextDevUrl} target="_blank" rel="noreferrer">Desenvolvido por Next Dev</a></div></footer>
       <a className="float-whatsapp" href={contactLink()} target="_blank" rel="noopener noreferrer" aria-label="Entrar em contato pelo WhatsApp"><MessageCircle/></a>
+      {selectedDetail && <DetailModal detail={selectedDetail} onClose={() => setSelectedDetail(null)}/>}
     </main>
   );
 }

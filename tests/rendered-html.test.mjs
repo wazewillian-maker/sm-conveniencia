@@ -34,9 +34,13 @@ test("server-renderiza o site da SM Conveniência", async () => {
   assert.match(html, /consultar%20os%20produtos%20dispon%C3%ADveis%20na%20tabacaria/);
   assert.match(html, /Segunda a sexta: 14h às 00h/);
   assert.match(html, /Sábados, domingos e feriados: 11h às 00h/);
-  assert.match(html, /Seu churrasco começa aqui/);
+  assert.match(html, /Ver itens de Combo Churrasco/);
+  assert.match(html, /Ver detalhes de Narguilés/);
+  assert.match(html, /Conhecer a categoria/);
+  assert.match(html, /\/details\/churrasco\.jpg/);
+  assert.match(html, /\/details\/narguile\.jpg/);
   assert.match(html, /Carvão/);
-  assert.match(html, /consultar%20os%20produtos%20dispon%C3%ADveis%20para%20churrasco/);
-  assert.doesNotMatch(html, /Pedir agora|Peça agora|Fazer pedido|Comprar|Número a confirmar|Endereço a confirmar/);
+  assert.doesNotMatch(html, /R\$\s|A partir de/);
+  assert.doesNotMatch(html, /Pedir agora|Peça agora|Fazer pedido|Comprar|Número a confirmar|Endereço a confirmar|delivery/i);
   assert.doesNotMatch(html, /codex-preview/);
 });
