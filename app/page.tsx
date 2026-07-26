@@ -3,7 +3,7 @@
 /* eslint-disable @next/next/no-img-element */
 
 import { useEffect, useMemo, useState } from "react";
-import { Beer, BottleWine, Candy, ChevronRight, GlassWater, IceCreamBowl, MapPin, Menu, MessageCircle, Package, Search, ShoppingBag, Sparkles, Star, X, Zap } from "lucide-react";
+import { Beer, BottleWine, Candy, ChevronRight, Cigarette, Clock3, GlassWater, IceCreamBowl, MapPin, Menu, MessageCircle, Package, Search, ShieldAlert, ShoppingBag, Sparkles, Star, X, Zap } from "lucide-react";
 import { categories, combos, products, promotions, type Category } from "../src/data/catalog";
 import { storeConfig, whatsappLink } from "../src/data/storeConfig";
 
@@ -17,6 +17,24 @@ const moments = [
 
 const money = (value: number) => value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 const contactLink = (name?: string) => whatsappLink(name ? `Olá! Encontrei a SM Conveniência pelo site e gostaria de mais informações sobre: ${name}.` : undefined);
+const tobaccoLink = whatsappLink("Olá! Encontrei a SM Conveniência pelo site e gostaria de consultar os produtos disponíveis na tabacaria.");
+const tobaccoCategories = [
+  "Cigarros",
+  "Narguilés",
+  "Essências para narguilé",
+  "Carvão para narguilé",
+  "Acessórios para narguilé",
+  "Piteiras",
+  "Papel alumínio",
+  "Pegadores",
+  "Rosh",
+  "Mangueiras",
+  "Outros acessórios disponíveis",
+];
+const tobaccoImages = [
+  "https://images.pexels.com/photos/14443340/pexels-photo-14443340.jpeg?auto=compress&cs=tinysrgb&w=900",
+  "https://images.pexels.com/photos/14443346/pexels-photo-14443346.jpeg?auto=compress&cs=tinysrgb&w=900",
+];
 
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -45,7 +63,7 @@ export default function Home() {
 
   useEffect(() => {
     const targets = document.querySelectorAll(
-      ".section-head, .category-grid > *, .promo-grid > *, .moments > *, .catalog-tools, .product-grid > *, .combo-grid > *, .about > *, .location > *, .final-cta > *, footer > *",
+      ".section-head, .category-grid > *, .promo-grid > *, .moments > *, .catalog-tools, .product-grid > *, .tobacco-grid > *, .combo-grid > *, .about > *, .location > *, .final-cta > *, footer > *",
     );
     targets.forEach((element, index) => {
       element.classList.add("reveal");
@@ -77,7 +95,7 @@ export default function Home() {
       <header className={`header ${headerScrolled ? "scrolled" : ""}`}>
         <a href="#inicio" className="brand"><span>SM</span><b>Conveniência</b></a>
         <nav className={menuOpen ? "nav open" : "nav"}>
-          {["Início", "Promoções", "Catálogo", "Sobre", "Localização"].map(item => <a key={item} href={`#${item.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase()}`} onClick={() => setMenuOpen(false)}>{item}</a>)}
+          {["Início", "Promoções", "Catálogo", "Tabacaria", "Sobre", "Localização"].map(item => <a key={item} href={`#${item.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase()}`} onClick={() => setMenuOpen(false)}>{item}</a>)}
           <a className="button button-sm" href={contactLink()} target="_blank" rel="noopener noreferrer">Entre em contato</a>
         </nav>
         <button className="menu" aria-label="Abrir menu" onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? <X /> : <Menu />}</button>
@@ -97,7 +115,7 @@ export default function Home() {
 
       <section className="section category-section">
         <div className="section-head"><div><p className="eyebrow">Encontre rápido</p><h2>O que vai bem agora?</h2></div><p>Toque em uma categoria e vá direto ao que procura.</p></div>
-        <div className="category-grid">{categories.map((cat, i) => { const Icon = categoryIcons[i]; return <button key={cat} onClick={() => jumpToCatalog(cat)}><Icon/><span>{cat}</span><ChevronRight/></button>})}</div>
+        <div className="category-grid">{categories.map((cat, i) => { const Icon = categoryIcons[i]; return <button key={cat} onClick={() => jumpToCatalog(cat)}><Icon/><span>{cat}</span><ChevronRight/></button>})}<a href="#tabacaria"><Cigarette/><span>Tabacaria</span><ChevronRight/></a></div>
       </section>
 
       <section id="promocoes" className="section dark-band">
@@ -119,9 +137,15 @@ export default function Home() {
         <p className="demo-note">Produtos, disponibilidade e preços devem ser confirmados no atendimento.</p>
       </section>
 
+      <section id="tabacaria" className="section tobacco-section">
+        <div className="section-head"><div><p className="eyebrow"><Cigarette size={15}/> Espaço Tabacaria</p><h2>Tudo para o seu momento, em um só lugar.</h2></div><p>Consulte nossa equipe para conhecer as opções disponíveis em cada categoria.</p></div>
+        <div className="tobacco-grid">{tobaccoCategories.map((category, index) => <article className="tobacco-card" key={category}><img src={tobaccoImages[index % tobaccoImages.length]} alt="" loading="lazy"/><div><small>Tabacaria</small><h3>{category}</h3><p>Consulte a disponibilidade atual pelo WhatsApp.</p></div></article>)}</div>
+        <div className="tobacco-actions"><a className="button" href={tobaccoLink} target="_blank" rel="noopener noreferrer"><MessageCircle/> Consultar disponibilidade</a><p className="age-warning"><ShieldAlert/> Venda proibida para menores de 18 anos.</p></div>
+      </section>
+
       <section id="combos" className="section dark-band">
         <div className="section-head"><div><p className="eyebrow">Tudo combinado</p><h2>Combos para facilitar</h2></div><p>Seleções prontas para você resolver o momento em poucos toques.</p></div>
-        <div className="combo-grid">{combos.map(combo => <article className="combo-card" key={combo.name}><img src={combo.image} alt={combo.name}/><div className="card-body"><h3>{combo.name}</h3><ul>{combo.items.map(i => <li key={i}><Star/> {i}</li>)}</ul><div className="combo-price"><span>A partir de</span><strong>{money(combo.price)}</strong></div><a className="button full" href={contactLink(combo.name)} target="_blank" rel="noopener noreferrer">Consultar pelo WhatsApp</a></div></article>)}</div>
+        <div className="combo-grid">{combos.map(combo => <article className="combo-card" key={combo.name}><img src={combo.image} alt={combo.name}/><div className="card-body">{"eyebrow" in combo && <small>{combo.eyebrow}</small>}<h3>{combo.name}</h3>{"description" in combo && <p>{combo.description}</p>}<ul>{combo.items.map(i => <li key={i}><Star/> {i}</li>)}</ul>{"price" in combo && <div className="combo-price"><span>A partir de</span><strong>{money(combo.price)}</strong></div>}<a className="button full" href={whatsappLink("message" in combo ? combo.message : `Olá! Encontrei a SM Conveniência pelo site e gostaria de mais informações sobre: ${combo.name}.`)} target="_blank" rel="noopener noreferrer">{"buttonLabel" in combo ? combo.buttonLabel : "Consultar pelo WhatsApp"}</a></div></article>)}</div>
         <p className="demo-note">Consulte a disponibilidade e os preços atuais pelo WhatsApp.</p>
       </section>
 
@@ -132,11 +156,11 @@ export default function Home() {
 
       <section id="localizacao" className="section location">
         <a className="map-link" href={storeConfig.mapsUrl} target="_blank" rel="noopener noreferrer" aria-label="Abrir a localização da SM Conveniência no Google Maps"><iframe className="map-frame" src={storeConfig.mapsEmbedUrl} title="Mapa da SM Conveniência" loading="lazy" tabIndex={-1} /></a>
-        <div className="location-info"><p className="eyebrow">Venha até a SM</p><h2>Localização e contato</h2><a className="info-row" href={storeConfig.mapsUrl} target="_blank" rel="noopener noreferrer"><MapPin/><div><small>Endereço</small><strong>{storeConfig.address}</strong></div></a><a className="info-row" href={contactLink()} target="_blank" rel="noopener noreferrer"><MessageCircle/><div><small>WhatsApp</small><strong>{storeConfig.whatsappDisplay}</strong></div></a><div className="location-actions"><a className="button" href={storeConfig.mapsUrl} target="_blank" rel="noopener noreferrer">Como chegar</a></div></div>
+        <div className="location-info"><p className="eyebrow">Venha até a SM</p><h2>Localização e contato</h2><a className="info-row" href={storeConfig.mapsUrl} target="_blank" rel="noopener noreferrer"><MapPin/><div><small>Endereço</small><strong>{storeConfig.address}</strong></div></a><div className="info-row"><Clock3/><div><small>Horário de atendimento</small><strong>{storeConfig.weekdayHours}</strong><strong>{storeConfig.weekendHours}</strong></div></div><a className="info-row" href={contactLink()} target="_blank" rel="noopener noreferrer"><MessageCircle/><div><small>WhatsApp</small><strong>{storeConfig.whatsappDisplay}</strong></div></a><div className="location-actions"><a className="button" href={storeConfig.mapsUrl} target="_blank" rel="noopener noreferrer">Como chegar</a></div></div>
       </section>
 
       <section className="final-cta"><p className="eyebrow">Fale com a SM</p><h2>Bateu a vontade? <em>A SM resolve.</em></h2><p>Consulte seus produtos favoritos com a gente pelo WhatsApp.</p><a className="button" href={contactLink()} target="_blank" rel="noopener noreferrer"><MessageCircle/> Entre em contato</a></section>
-      <footer><a href="#inicio" className="brand"><span>SM</span><b>Conveniência</b></a><div className="footer-links"><a href="#promocoes">Promoções</a><a href="#catalogo">Catálogo</a><a href="#sobre">Sobre</a><a href="#localizacao">Localização</a></div><div className="footer-meta"><a href={contactLink()} target="_blank" rel="noopener noreferrer">{storeConfig.whatsappDisplay}</a><a href={storeConfig.mapsUrl} target="_blank" rel="noopener noreferrer">{storeConfig.address}</a></div><div className="footer-bottom"><span>© {new Date().getFullYear()} SM Conveniência. Todos os direitos reservados.</span><a className="next-dev-credit" href={storeConfig.nextDevUrl} target="_blank" rel="noreferrer">Desenvolvido por Next Dev</a></div></footer>
+      <footer><a href="#inicio" className="brand"><span>SM</span><b>Conveniência</b></a><div className="footer-links"><a href="#promocoes">Promoções</a><a href="#catalogo">Catálogo</a><a href="#tabacaria">Tabacaria</a><a href="#sobre">Sobre</a><a href="#localizacao">Localização</a></div><div className="footer-meta"><a href={contactLink()} target="_blank" rel="noopener noreferrer">{storeConfig.whatsappDisplay}</a><a href={storeConfig.mapsUrl} target="_blank" rel="noopener noreferrer">{storeConfig.address}</a><span className="footer-hours"><Clock3/><span><b>Horário de atendimento</b>{storeConfig.weekdayHours}<br/>{storeConfig.weekendHours}</span></span></div><div className="footer-bottom"><span>© {new Date().getFullYear()} SM Conveniência. Todos os direitos reservados.</span><a className="next-dev-credit" href={storeConfig.nextDevUrl} target="_blank" rel="noreferrer">Desenvolvido por Next Dev</a></div></footer>
       <a className="float-whatsapp" href={contactLink()} target="_blank" rel="noopener noreferrer" aria-label="Entrar em contato pelo WhatsApp"><MessageCircle/></a>
     </main>
   );

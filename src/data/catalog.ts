@@ -21,7 +21,7 @@ export const promotions = [
 ];
 
 export const combos = [
-  { name: "Combo Churrasco", items: ["Cervejas geladas", "Refrigerante", "Gelo"], price: 69.9, image: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=1000&q=85" },
+  { name: "Seu churrasco começa aqui", eyebrow: "Combo Churrasco", description: "Encontre carvão, gelo, cervejas e refrigerantes para deixar seu churrasco completo, sem perder tempo.", items: ["Carvão", "Gelo", "Cervejas", "Refrigerantes"], message: "Olá! Encontrei a SM Conveniência pelo site e gostaria de consultar os produtos disponíveis para churrasco.", buttonLabel: "Consultar produtos", image: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=1000&q=85" },
   { name: "Combo Resenha", items: ["Energéticos", "Salgadinhos", "Gelo"], price: 54.9, image: "https://images.unsplash.com/photo-1527529482837-4698179dc6ce?auto=format&fit=crop&w=1000&q=85" },
   { name: "Combo Noite de Filmes", items: ["Refrigerante", "Pipoca", "Chocolate"], price: 34.9, image: "https://images.pexels.com/photos/8972769/pexels-photo-8972769.jpeg?auto=compress&cs=tinysrgb&w=1000" },
   { name: "Combo Energético", items: ["2 energéticos", "Gelo", "Snack"], price: 39.9, image: "https://images.unsplash.com/photo-1544145945-f90425340c7e?auto=format&fit=crop&w=1000&q=85" },

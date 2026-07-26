@@ -29,6 +29,14 @@ test("server-renderiza o site da SM Conveniência", async () => {
   assert.match(html, /Ol%C3%A1!%20Encontrei%20a%20SM%20Conveni%C3%AAncia%20pelo%20site/);
   assert.match(html, /Av\. Falcão, nº 170, Sala 03/);
   assert.match(html, /google\.com\/maps\/search\/\?api=1/);
+  assert.match(html, /id="tabacaria"/);
+  assert.match(html, /Venda proibida para menores de 18 anos/);
+  assert.match(html, /consultar%20os%20produtos%20dispon%C3%ADveis%20na%20tabacaria/);
+  assert.match(html, /Segunda a sexta: 14h às 00h/);
+  assert.match(html, /Sábados, domingos e feriados: 11h às 00h/);
+  assert.match(html, /Seu churrasco começa aqui/);
+  assert.match(html, /Carvão/);
+  assert.match(html, /consultar%20os%20produtos%20dispon%C3%ADveis%20para%20churrasco/);
   assert.doesNotMatch(html, /Pedir agora|Peça agora|Fazer pedido|Comprar|Número a confirmar|Endereço a confirmar/);
   assert.doesNotMatch(html, /codex-preview/);
 });
