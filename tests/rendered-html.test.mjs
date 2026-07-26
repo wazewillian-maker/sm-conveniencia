@@ -20,6 +20,12 @@ test("server-renderiza o site da SM Conveniência", async () => {
 
   const html = await response.text();
   assert.match(html, /<title>SM Conveni/);
+  assert.match(html, /SM Conveniência em Bombas, Bombinhas/);
+  assert.match(html, /Logo da SM Conveniência/);
+  assert.match(html, /\/brand\/logo-sm-conveniencia\.png/);
+  assert.match(html, /Aberto todos os dias até meia-noite/);
+  assert.match(html, /Abrir rota no Google Maps/);
+  assert.match(html, /application\/ld\+json/);
   assert.match(html, /Tudo o que voc/);
   assert.match(html, /id="catalogo"/);
   assert.match(html, /id="promocoes"/);
