@@ -10,12 +10,6 @@ import { storeConfig, whatsappLink } from "../src/data/storeConfig";
 import { DetailModal } from "./components/DetailModal";
 
 const categoryIcons = [GlassWater, Beer, BottleWine, Zap, GlassWater, IceCreamBowl, Package, Candy, ShoppingBag];
-const moments = [
-  { title: "Para o churrasco", text: "Bebidas geladas, gelo e acompanhamentos.", image: "https://images.unsplash.com/photo-1529193591184-b1d58069ecdd?auto=format&fit=crop&w=1000&q=85" },
-  { title: "Para a resenha", text: "Tudo pronto para reunir a galera.", image: "https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=1000&q=85" },
-  { title: "Para acompanhar o filme", text: "Salgadinhos, doces e bebidas no clima certo.", image: "https://images.pexels.com/photos/8972769/pexels-photo-8972769.jpeg?auto=compress&cs=tinysrgb&w=1000" },
-  { title: "Para refrescar a noite", text: "Gelo, energéticos e bebidas bem geladas.", image: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=1000&q=85" },
-];
 
 const contactLink = (name?: string) => whatsappLink(name ? `Olá! Encontrei a SM Conveniência pelo site e gostaria de mais informações sobre: ${name}.` : undefined);
 const tobaccoLink = whatsappLink("Olá! Encontrei a SM Conveniência pelo site e gostaria de consultar os produtos disponíveis na tabacaria.");
@@ -48,7 +42,7 @@ export default function Home() {
 
   useEffect(() => {
     const targets = document.querySelectorAll(
-      ".section-head, .category-grid > *, .promo-grid > *, .moments > *, .catalog-tools, .product-grid > *, .tobacco-grid > *, .combo-grid > *, .about > *, .location > *, .final-cta > *, footer > *",
+      ".section-head, .category-grid > *, .promo-grid > *, .catalog-tools, .product-grid > *, .tobacco-grid > *, .combo-grid > *, .about > *, .location > *, .final-cta > *, footer > *",
     );
     targets.forEach((element, index) => {
       element.classList.add("reveal");
@@ -107,11 +101,6 @@ export default function Home() {
         <div className="section-head"><div><p className="eyebrow">Oportunidades da vez</p><h2>Promoções da SM</h2></div><p>Confira as opções em destaque e fale com a gente para saber mais.</p></div>
         <div className="promo-grid">{promotions.map(item => <article className="promo-card" key={item.id}><div className="product-image"><img src={item.image} alt={item.name}/><span className="badge">{item.badge}</span></div><div className="card-body"><small>{item.category}</small><h3>{item.name}</h3><p>{item.description}</p><a className="button full" href={contactLink(item.name)} target="_blank" rel="noopener noreferrer">Consultar pelo WhatsApp <MessageCircle/></a></div></article>)}</div>
         <p className="demo-note">Consulte a disponibilidade atual pelo WhatsApp.</p>
-      </section>
-
-      <section className="section">
-        <div className="section-head"><div><p className="eyebrow">Do seu jeito</p><h2>Escolhas que combinam com seu momento</h2></div><p>Mais que produtos: soluções práticas para cada ocasião.</p></div>
-        <div className="moments">{moments.map(m => <article key={m.title} style={{backgroundImage:`linear-gradient(180deg, transparent, rgba(5,5,5,.94)), url(${m.image})`}}><div><h3>{m.title}</h3><p>{m.text}</p><a href="#catalogo">Explorar seleção <ChevronRight/></a></div></article>)}</div>
       </section>
 
       <section id="catalogo" className="section catalog">

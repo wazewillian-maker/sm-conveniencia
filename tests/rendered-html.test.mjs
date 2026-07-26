@@ -40,6 +40,7 @@ test("server-renderiza o site da SM Conveniência", async () => {
   assert.match(html, /\/details\/churrasco\.jpg/);
   assert.match(html, /\/details\/narguile\.jpg/);
   assert.match(html, /Carvão/);
+  assert.doesNotMatch(html, /Escolhas que combinam com seu momento|Explorar seleção/);
   assert.doesNotMatch(html, /R\$\s|A partir de/);
   assert.doesNotMatch(html, /Pedir agora|Peça agora|Fazer pedido|Comprar|Número a confirmar|Endereço a confirmar|delivery/i);
   assert.doesNotMatch(html, /codex-preview/);
