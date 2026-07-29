@@ -2,7 +2,7 @@
 /* eslint-disable @next/next/no-img-element */
 
 import { useEffect, useRef, useState } from "react";
-import { MessageCircle, ShieldAlert, X } from "lucide-react";
+import { ImageIcon, MessageCircle, ShieldAlert, X } from "lucide-react";
 import type { DetailGroup } from "../../src/data/details";
 import { whatsappLink } from "../../src/data/storeConfig";
 
@@ -65,7 +65,7 @@ export function DetailModal({ detail, onClose }: DetailModalProps) {
     }}>
       <div
         ref={dialogRef}
-        className="detail-modal"
+        className={`detail-modal ${detail.type === "combo" ? "combo-detail-modal" : ""}`}
         role="dialog"
         aria-modal="true"
         aria-labelledby="detail-modal-title"
@@ -73,7 +73,13 @@ export function DetailModal({ detail, onClose }: DetailModalProps) {
       >
         <button ref={closeButtonRef} className="detail-close" onClick={requestClose} aria-label="Fechar detalhes"><X/></button>
         <div className="detail-hero">
-          <img src={detail.image} alt={`Imagem representativa de ${detail.cardTitle}`}/>
+          {detail.image ? (
+            <img src={detail.image} alt={detail.cardTitle} loading="lazy"/>
+          ) : (
+            <div className="detail-image-placeholder detail-hero-placeholder" role="img" aria-label="Imagem não cadastrada">
+              <ImageIcon/><span>Imagem não cadastrada</span>
+            </div>
+          )}
           <div>
             <small>{detail.type === "combo" ? "Detalhes do combo" : "Espaço Tabacaria"}</small>
             <h2 id="detail-modal-title">{detail.title}</h2>
@@ -83,7 +89,13 @@ export function DetailModal({ detail, onClose }: DetailModalProps) {
         <div className="detail-items">
           {detail.items.map((item, index) => (
             <article className="detail-item" key={`${item.name}-${index}`}>
-              <img src={item.image} alt={`Imagem representativa de ${item.name}`}/>
+              {item.image ? (
+                <img src={item.image} alt={item.name} loading="lazy"/>
+              ) : (
+                <div className="detail-image-placeholder" role="img" aria-label={`Imagem não cadastrada para ${item.name}`}>
+                  <ImageIcon/><span>Imagem não cadastrada</span>
+                </div>
+              )}
               <div>
                 <h3>{item.name}</h3>
                 <p>{item.description}</p>

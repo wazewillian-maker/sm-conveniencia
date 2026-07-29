@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
 import test from "node:test";
 
 async function render() {
@@ -41,13 +42,41 @@ test("server-renderiza o site da SM Conveniência", async () => {
   assert.match(html, /Segunda a sexta: 14h às 00h/);
   assert.match(html, /Sábados, domingos e feriados: 11h às 00h/);
   assert.match(html, /Ver itens de Combo Churrasco/);
+  assert.match(html, /Ver itens de Combo Resenha/);
+  assert.match(html, /Ver itens de Combo Energético/);
+  assert.match(html, /\/images\/combos\/combo churrasco\/capa \(3\)\.jpeg/);
+  assert.match(html, /\/images\/combos\/combo resenha\/capa \(2\)\.jpeg/);
+  assert.match(html, /\/images\/combos\/combo energetico\/capa \(1\)\.jpeg/);
   assert.match(html, /Ver detalhes de Narguilés/);
   assert.match(html, /Conhecer a categoria/);
-  assert.match(html, /\/details\/churrasco\.jpg/);
-  assert.match(html, /\/details\/narguile\.jpg/);
+  assert.match(html, /Ver todos os produtos de Cervejas/);
+  assert.match(html, /Ver todos os produtos de Destilados/);
+  assert.match(html, /\/images\/produtos\/cervejas\/capa\.webp\.jpeg/);
+  assert.match(html, /\/images\/produtos\/gelo\/capa\.webp/);
+  assert.match(html, /Imagem n.o cadastrada/);
+  assert.doesNotMatch(html, /\/details\//);
   assert.match(html, /Carvão/);
   assert.doesNotMatch(html, /Escolhas que combinam com seu momento|Explorar seleção/);
+  assert.doesNotMatch(html, /Noite de Filmes|combo-filmes|Para acompanhar o filme/);
   assert.doesNotMatch(html, /R\$\s|A partir de/);
   assert.doesNotMatch(html, /Pedir agora|Peça agora|Fazer pedido|Comprar|Número a confirmar|Endereço a confirmar|delivery/i);
   assert.doesNotMatch(html, /codex-preview/);
+});
+
+test("catálogo interno usa apenas fotos individuais existentes", async () => {
+  const source = await readFile(new URL("../src/data/categoryCatalog.ts", import.meta.url), "utf8");
+  assert.doesNotMatch(source, /\/capa\.webp(?:\.jpeg)?/);
+  assert.match(source, /\/images\/produtos\/cervejas\/amstel\.webp\.jpeg/);
+  assert.match(source, /\/images\/produtos\/destilados\/absolut\.webp\.jpeg/);
+  assert.match(source, /\/images\/produtos\/refrigerantes\/cocacola\.webp\.jpeg/);
+  assert.match(source, /\/images\/produtos\/agua\/agua\.webp\.jpeg/);
+});
+
+test("combos reutilizam o cadastro central e nao usam imagens genericas", async () => {
+  const source = await readFile(new URL("../src/data/details.ts", import.meta.url), "utf8");
+  assert.match(source, /productRegistry\.cervejaOriginal/);
+  assert.match(source, /productRegistry\.cocaCola/);
+  assert.match(source, /productRegistry\.monster/);
+  assert.match(source, /productRegistry\.gelo/);
+  assert.doesNotMatch(source, /\/details\/|unsplash|pexels|pixabay/i);
 });

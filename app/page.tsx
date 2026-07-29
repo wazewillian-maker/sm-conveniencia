@@ -3,10 +3,12 @@
 /* eslint-disable @next/next/no-img-element */
 
 import { useEffect, useMemo, useState } from "react";
-import { Beer, BottleWine, Candy, ChevronRight, Cigarette, Clock3, GlassWater, IceCreamBowl, MapPin, Menu, MessageCircle, Package, Search, ShieldAlert, ShoppingBag, Sparkles, Star, X, Zap } from "lucide-react";
+import { Beer, BottleWine, Candy, ChevronRight, Cigarette, Clock3, GlassWater, IceCreamBowl, ImageIcon, MapPin, Menu, MessageCircle, Package, Search, ShieldAlert, ShoppingBag, Sparkles, Star, X, Zap } from "lucide-react";
 import { categories, products, promotions, type Category } from "../src/data/catalog";
+import { categoryCatalog } from "../src/data/categoryCatalog";
 import { comboDetails, tobaccoDetails, type DetailGroup } from "../src/data/details";
 import { storeConfig, whatsappLink } from "../src/data/storeConfig";
+import { CategoryCatalogModal } from "./components/CategoryCatalogModal";
 import { DetailModal } from "./components/DetailModal";
 
 const categoryIcons = [GlassWater, Beer, BottleWine, Zap, GlassWater, IceCreamBowl, Package, Candy, ShoppingBag];
@@ -25,6 +27,7 @@ export default function Home() {
   const [active, setActive] = useState<"Todos" | Category>("Todos");
   const [query, setQuery] = useState("");
   const [selectedDetail, setSelectedDetail] = useState<DetailGroup | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
   const filtered = useMemo(() => products.filter(p => (active === "Todos" || p.category === active) && p.name.toLowerCase().includes(query.toLowerCase())), [active, query]);
   const jumpToCatalog = (category: Category) => { setActive(category); document.querySelector("#catalogo")?.scrollIntoView({ behavior: "smooth" }); };
 
@@ -111,14 +114,14 @@ export default function Home() {
       <section id="catalogo" className="section catalog">
         <div className="section-head"><div><p className="eyebrow">Escolha sem pressa</p><h2>Catálogo SM</h2></div><p>Busque, filtre e consulte os produtos diretamente com a equipe.</p></div>
         <div className="catalog-tools"><label><Search/><input value={query} onChange={e => setQuery(e.target.value)} placeholder="Buscar no catálogo..." /></label><div className="filters">{(["Todos", ...categories] as const).map(cat => <button className={active === cat ? "active" : ""} onClick={() => setActive(cat)} key={cat}>{cat}</button>)}</div></div>
-        <div className="product-grid">{filtered.map(item => <article className="product-card" key={item.id}><img src={item.image} alt={item.name} loading="lazy"/><div className="card-body"><small>{item.category}</small><h3>{item.name}</h3><p>{item.description}</p><div className="product-bottom"><span>Consulte disponibilidade</span><a href={contactLink(item.name)} target="_blank" rel="noopener noreferrer" aria-label={`Consultar ${item.name} pelo WhatsApp`}><MessageCircle/></a></div></div></article>)}</div>
+        <div className="product-grid">{filtered.map(item => <button className="product-card catalog-category-card" key={item.id} onClick={() => setSelectedCategory(item.category)} aria-label={`Ver todos os produtos de ${item.category}`}><img src={item.image} alt={item.name} loading="lazy"/><div className="card-body"><small>{item.category}</small><h3>{item.name}</h3><p>{item.description}</p><div className="product-bottom"><span>Ver produtos</span><ChevronRight/></div></div></button>)}</div>
         {!filtered.length && <div className="empty">Nenhum produto encontrado nesta busca.</div>}
         <p className="demo-note">Produtos e disponibilidade devem ser confirmados no atendimento.</p>
       </section>
 
       <section id="tabacaria" className="section tobacco-section">
         <div className="section-head"><div><p className="eyebrow"><Cigarette size={15}/> Espaço Tabacaria</p><h2>Tudo para o seu momento, em um só lugar.</h2></div><p>Consulte nossa equipe para conhecer as opções disponíveis em cada categoria.</p></div>
-        <div className="tobacco-grid">{tobaccoDetails.map(category => <button className="tobacco-card" key={category.id} onClick={() => setSelectedDetail(category)} aria-label={`Ver detalhes de ${category.cardTitle}`}><img src={category.image} alt={`Imagem representativa de ${category.cardTitle}`} loading="lazy"/><div><small>Tabacaria</small><h3>{category.cardTitle}</h3><p>{category.description}</p><span>Conhecer a categoria <ChevronRight/></span></div></button>)}</div>
+        <div className="tobacco-grid">{tobaccoDetails.map(category => <button className="tobacco-card" key={category.id} onClick={() => setSelectedDetail(category)} aria-label={`Ver detalhes de ${category.cardTitle}`}>{category.image ? <img src={category.image} alt={category.cardTitle} loading="lazy"/> : <div className="tobacco-image-placeholder" role="img" aria-label={`Imagem não cadastrada para ${category.cardTitle}`}><ImageIcon/><span>Imagem não cadastrada</span></div>}<div className="tobacco-card-content"><small>Tabacaria</small><h3>{category.cardTitle}</h3><p>{category.description}</p><span>Conhecer a categoria <ChevronRight/></span></div></button>)}</div>
         <div className="tobacco-actions"><a className="button" href={tobaccoLink} target="_blank" rel="noopener noreferrer"><MessageCircle/> Consultar disponibilidade</a><p className="age-warning"><ShieldAlert/> Venda proibida para menores de 18 anos.</p></div>
       </section>
 
@@ -142,6 +145,7 @@ export default function Home() {
       <footer><a href="#inicio" className="brand" aria-label="Voltar ao início"><Brand/></a><div className="footer-links"><a href="#promocoes">Promoções</a><a href="#catalogo">Catálogo</a><a href="#tabacaria">Tabacaria</a><a href="#sobre">Sobre</a><a href="#localizacao">Localização</a><a href={storeConfig.mapsUrl} target="_blank" rel="noopener noreferrer">Abrir no Google Maps</a></div><div className="footer-meta"><a href={contactLink()} target="_blank" rel="noopener noreferrer">WhatsApp: {storeConfig.whatsappDisplay}</a><a href={storeConfig.mapsUrl} target="_blank" rel="noopener noreferrer">{storeConfig.address}</a><span className="footer-hours"><Clock3/><span><b>Horário de atendimento</b>{storeConfig.weekdayHours}<br/>{storeConfig.weekendHours}</span></span><span className="footer-age"><ShieldAlert/> Venda proibida para menores de 18 anos.</span></div><div className="footer-bottom"><span>© {new Date().getFullYear()} SM Conveniência. Todos os direitos reservados.</span><a className="next-dev-credit" href={storeConfig.nextDevUrl} target="_blank" rel="noopener noreferrer">Desenvolvido por Next Dev</a></div></footer>
       <a className="float-whatsapp" href={contactLink()} target="_blank" rel="noopener noreferrer" aria-label="Entrar em contato pelo WhatsApp"><MessageCircle/></a>
       {selectedDetail && <DetailModal detail={selectedDetail} onClose={() => setSelectedDetail(null)}/>}
+      {selectedCategory && <CategoryCatalogModal category={selectedCategory} products={categoryCatalog[selectedCategory]} onClose={() => setSelectedCategory(null)}/>}
     </main>
   );
 }
