@@ -40,7 +40,7 @@ export const comboDetails: DetailGroup[] = [
     cardTitle: "Combo Churrasco",
     title: "Tudo para o seu churrasco",
     description: "Uma seleção prática para consultar tudo o que pode completar o seu churrasco, sem perder tempo.",
-    image: "/images/combos/combo churrasco/capa (3).jpeg",
+    image: "/images/combos/combo-churrasco.jpeg",
     whatsappMessage: "Olá! Encontrei a SM Conveniência pelo site e gostaria de consultar os produtos disponíveis para o Combo Churrasco.",
     buttonLabel: "Consultar itens pelo WhatsApp",
     items: [
@@ -56,7 +56,7 @@ export const comboDetails: DetailGroup[] = [
     cardTitle: "Combo Resenha",
     title: "Itens para a sua resenha",
     description: "Consulte uma seleção de energéticos, salgadinhos e gelo para reunir a galera.",
-    image: "/images/combos/combo resenha/capa (2).jpeg",
+    image: "/images/combos/combo-resenha.jpeg",
     whatsappMessage: "Olá! Encontrei a SM Conveniência pelo site e gostaria de consultar os itens disponíveis para o Combo Resenha.",
     buttonLabel: "Consultar itens pelo WhatsApp",
     items: [
@@ -71,7 +71,7 @@ export const comboDetails: DetailGroup[] = [
     cardTitle: "Combo Energético",
     title: "Energia para o seu momento",
     description: "Consulte energéticos, gelo e acompanhamentos disponíveis na SM.",
-    image: "/images/combos/combo energetico/capa (1).jpeg",
+    image: "/images/combos/combo-energetico.jpeg",
     whatsappMessage: "Olá! Encontrei a SM Conveniência pelo site e gostaria de consultar os itens disponíveis do Combo Energético.",
     buttonLabel: "Consultar itens pelo WhatsApp",
     items: [
@@ -82,12 +82,19 @@ export const comboDetails: DetailGroup[] = [
   },
 ];
 
-const genericTobaccoDetail = (id: string, name: string, description: string): DetailGroup => ({
+const tobaccoImages = {
+  general: "/images/tabacaria/tabacaria.jpg",
+  narguile: "/images/tabacaria/narguile.jpg",
+  carvao: "/images/tabacaria/carvao.jpg",
+};
+
+const genericTobaccoDetail = (id: string, name: string, description: string, image = tobaccoImages.general): DetailGroup => ({
   id,
   type: "tobacco",
   cardTitle: name,
   title: name,
   description,
+  image,
   whatsappMessage: `Olá! Encontrei a SM Conveniência pelo site e gostaria de consultar os produtos disponíveis na categoria ${name}.`,
   buttonLabel: "Consultar pelo WhatsApp",
   ageRestricted: true,
@@ -95,6 +102,7 @@ const genericTobaccoDetail = (id: string, name: string, description: string): De
     {
       name: "Opções disponíveis na loja",
       description: "A equipe da SM pode informar as opções disponíveis atualmente.",
+      image,
       availability: tobaccoAvailability,
     },
   ],
@@ -108,12 +116,14 @@ export const tobaccoDetails: DetailGroup[] = [
     cardTitle: "Narguilés",
     title: "Narguilés",
     description: "Conheça as categorias de narguilé que podem estar disponíveis na SM.",
+    image: tobaccoImages.narguile,
     whatsappMessage: "Olá! Encontrei a SM Conveniência pelo site e gostaria de conhecer os modelos de narguilé disponíveis.",
     buttonLabel: "Consultar narguilés disponíveis",
     ageRestricted: true,
     items: ["Narguilés compactos", "Narguilés médios", "Narguilés grandes", "Narguilés completos", "Peças e reposição"].map(name => ({
       name,
       description: "Espaço preparado para receber as informações dos modelos reais.",
+      image: tobaccoImages.narguile,
       availability: tobaccoAvailability,
     })),
   },
@@ -122,15 +132,17 @@ export const tobaccoDetails: DetailGroup[] = [
     items: [{
       name: "Sabores disponíveis",
       description: "Consulte os sabores disponíveis atualmente na loja.",
+      image: tobaccoImages.general,
       availability: tobaccoAvailability,
     }],
   },
-  genericTobaccoDetail("carvao-narguile", "Carvão para narguilé", "Consulte os tipos disponíveis atualmente na loja."),
+  genericTobaccoDetail("carvao-narguile", "Carvão para narguilé", "Consulte os tipos disponíveis atualmente na loja.", tobaccoImages.carvao),
   {
     ...genericTobaccoDetail("acessorios", "Acessórios", "Consulte acessórios e peças disponíveis para narguilé."),
     items: ["Rosh", "Mangueiras", "Piteiras", "Pegadores", "Papel alumínio", "Peças de reposição"].map(name => ({
       name,
       description: "Consulte as opções disponíveis atualmente na loja.",
+      image: tobaccoImages.general,
       availability: tobaccoAvailability,
     })),
   },
